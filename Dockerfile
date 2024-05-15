@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.440.1-lts-jdk21
+FROM jenkins/jenkins:2.452.1-lts-jdk21
 
 # https://docs.docker.com/engine/reference/builder/#automatic-platform-args-in-the-global-scope
 ARG TARGETARCH

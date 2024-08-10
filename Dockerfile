@@ -1,11 +1,11 @@
-FROM jenkins/jenkins:2.440.1-lts-jdk21
+FROM jenkins/jenkins:2.462.1-lts-jdk21
 
 # https://docs.docker.com/engine/reference/builder/#automatic-platform-args-in-the-global-scope
 ARG TARGETARCH
 ARG TARGETOS
 
-ENV HELM_VERSION=v3.13.3
-ENV KUBECTL_VERSION=v1.26.12
+ENV HELM_VERSION=v3.15.3
+ENV KUBECTL_VERSION=v1.30.3
 
 # change user to root to install some tools
 USER root
@@ -16,7 +16,7 @@ RUN apt-get update -y \
 
 COPY scripts/* /usr/local/bin/
 
-ENV PIP_BREAK_SYSTEM_PACKAGES 1
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
 RUN fix-pip-dependencies.sh
 

@@ -28,19 +28,23 @@ RUN pip install --no-cache-dir --no-build-isolation --no-deps -r /tmp/requiremen
 # TODO: gseng - we may like to proxy ansible-galaxy over Nexus as well
 RUN ansible-galaxy collection install -p /usr/share/ansible/collections -r /tmp/requirements-ansible.yml
 
-RUN curl -L https://github.com/mikefarah/yq/releases/download/4.40.5/yq_${TARGETOS}_${TARGETARCH} -o /usr/bin/yq && \
+# NOTE: gseng - keep yq v3 for backward compatibility
+RUN curl -fsSL https://github.com/mikefarah/yq/releases/download/3.3.2/yq_${TARGETOS}_${TARGETARCH} -o /usr/bin/yq && \
     chmod +x /usr/bin/yq
+
+RUN curl -fsSL https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_${TARGETOS}_${TARGETARCH} -o /usr/bin/yq-v4 && \
+    chmod +x /usr/bin/yq-v4
 
 # NOTE: gseng - disable aws-iam-authenticator for now
 # RUN curl -L -o /usr/bin/aws-iam-authenticator \
 #     https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/${TARGETOS}/${TARGETARCH}/aws-iam-authenticator && \
 #     chmod +x /usr/bin/aws-iam-authenticator
 
-RUN curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
+RUN curl -fsSLO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETARCH}/kubectl && \
     chmod +x kubectl && \
     mv kubectl /usr/local/bin/
 
-RUN curl -o /tmp/helm.tar.gz \
+RUN curl -fsSL -o /tmp/helm.tar.gz \
       https://get.helm.sh/helm-${HELM_VERSION}-linux-${TARGETARCH}.tar.gz && \
     tar -C /tmp -xvf /tmp/helm.tar.gz && \
     mv /tmp/linux-${TARGETARCH}/helm /usr/local/bin/helm && \
